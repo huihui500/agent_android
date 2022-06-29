@@ -1,0 +1,7 @@
+#Tue Jun 28 18:36:12 CST 2022
+base.1=/home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/build/intermediates/dex/debug/mergeProjectDexDebug/classes.dex
+path.1=classes.dex
+base.0=/home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
+renamed.1=classes2.dex
+renamed.0=classes.dex
+path.0=classes.dex
