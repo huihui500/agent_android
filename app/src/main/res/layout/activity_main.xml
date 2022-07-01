@@ -10,7 +10,7 @@
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="20dp"
         android:background="#FFFFFF"
         android:contentDescription="@string/image_view"
         app:layout_constraintDimensionRatio="1:1"
@@ -86,5 +86,18 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/selectButton"
         app:layout_constraintTop_toTopOf="@+id/selectButton" />
+
+    <TextView
+        android:id="@+id/debug"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text="debug"
+        android:textSize="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/testButton"
+        app:layout_constraintTop_toTopOf="@+id/testButton" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

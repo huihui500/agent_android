@@ -13,6 +13,22 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+// 任务结果保存
+class Mission{
+    // 0 交通标志; 1 车牌; 2 图形； 3 qrcode
+    int mission_index;
+
+    ArrayList<Integer> traffic_sign;
+    // 车牌: 车牌字符，车牌颜色;
+    // qrcode: 二维码内容与颜色;
+    ArrayList<String> cq;
+    ArrayList<Integer> cq_color;
+
+    ArrayList<Integer> graph;
+    ArrayList<Integer> graph_color;
+
+};
+
 class Result {
     int classIndex;
     Float score;

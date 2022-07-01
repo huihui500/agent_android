@@ -4,7 +4,7 @@
             "outputFile": "/home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/home/khm/.gradle/caches/transforms-2/files-2.1/bf96d2b5a86ecd602a621e7e96856420/appcompat-1.2.0/res/values-night-v8/values-night-v8.xml",
+                    "source": "/home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/bf96d2b5a86ecd602a621e7e96856420/appcompat-1.2.0/res/values-night-v8/values-night-v8.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private int mImageIndex = 0;
     private String[] mTestImages = {"main1.jpg", "main2.png", "main3.png"};
 
+    private TextView textView;
     private ImageView mImageView;
     private ResultView mResultView;
     private Button mButtonDetect;
@@ -78,6 +80,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
     }
 
+    // load lib
+    static {
+        System.loadLibrary("objectdetection");
+    }
+
     /*
         权限申请，　
      */
@@ -102,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             finish();
         }
 
+        textView = findViewById(R.id.debug);
         mImageView = findViewById(R.id.imageView);
         mImageView.setImageBitmap(mBitmap);
         mResultView = findViewById(R.id.resultView);
@@ -256,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
 
+
     @Override
     public void run() {
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.mInputWidth, 180, true);
@@ -266,6 +275,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final Tensor outputTensor = outputTuple[0].toTensor();
         final float[] outputs = outputTensor.getDataAsFloatArray();
         final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
+
+
+        String output = opBitmap(mBitmap, Bitmap.Config.ARGB_8888);
+
         // 更新所有控件
         runOnUiThread(() -> {
             mButtonDetect.setEnabled(true);
@@ -274,6 +287,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             mResultView.setResults(results);
             mResultView.invalidate();
             mResultView.setVisibility(View.VISIBLE);
+            textView.setText(output);
         });
     }
+
+    public native String opBitmap(Bitmap bitmap, Bitmap.Config argb8888);
 }
