@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
-INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
-INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
-INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
+ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
+INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
+INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
+INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.4] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/cdaa83194e29814d01eb1fc6312e9c9a/constraintlayout-2.0.4/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat:1.2.0] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/bf96d2b5a86ecd602a621e7e96856420/appcompat-1.2.0/AndroidManifest.xml:17:1-24:12
 MERGED from [:openCVLib341] /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/openCVLib341/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
@@ -31,20 +31,20 @@ MERGED from [androidx.lifecycle:lifecycle-runtime:2.1.0] /home/khm/bag/jdk-8u172
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/8cf26fd0d5f767ad6dfe1019ab25b952/lifecycle-viewmodel-2.1.0/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.savedstate:savedstate:1.0.0] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/86f8c8e32c7613bbe5e86eb4377e9413/jetified-savedstate-1.0.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/bcf856ddfeb04b3b73ed182739910d39/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
-INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
-INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
-INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
+INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
+INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
+INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
 	package
 		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:3:5-47
 		INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml
 		INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
 		INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml
 	android:versionCode
 		INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-30:12
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:1-31:12
 		INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:2:11-69
@@ -56,8 +56,12 @@ uses-permission#android.permission.CAMERA
 ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:6:5-65
 	android:name
 		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:6:22-62
+uses-permission#android.permission.MANAGE_EXTERNAL_STORAGE
+ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:7:5-82
+	android:name
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:7:22-79
 application
-ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:7:5-28:19
+ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:8:5-29:19
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.4] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/cdaa83194e29814d01eb1fc6312e9c9a/constraintlayout-2.0.4/AndroidManifest.xml:9:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.0.4] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/cdaa83194e29814d01eb1fc6312e9c9a/constraintlayout-2.0.4/AndroidManifest.xml:9:5-20
 MERGED from [androidx.camera:camera-camera2:1.0.0-alpha05] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/03e258dd1a54bb78b5d34876ddcad997/jetified-camera-camera2-1.0.0-alpha05/AndroidManifest.xml:24:5-31:19
@@ -67,47 +71,47 @@ MERGED from [androidx.core:core:1.3.1] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/67aa86ef8808cac41aa5afe6d271f3ea/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.0] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/67aa86ef8808cac41aa5afe6d271f3ea/versionedparcelable-1.1.0/AndroidManifest.xml:24:5-25:19
 	android:requestLegacyExternalStorage
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:13:9-52
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:14:9-52
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.3.1] /home/khm/bag/jdk-8u172-linux-x64/jdk1.8.0_172/caches/transforms-2/files-2.1/ae3468b444d41a56f261ecbb8448fe17/core-1.3.1/AndroidManifest.xml:24:18-86
 	android:supportsRtl
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:12:9-35
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:13:9-35
 	android:label
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:10:9-41
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:11:9-41
 	android:roundIcon
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:11:9-54
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:12:9-54
 	android:icon
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:9:9-43
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:10:9-43
 	android:allowBackup
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:8:9-35
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:9:9-35
 	android:theme
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:14:9-40
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:15:9-40
 activity#org.pytorch.demo.objectdetection.MainActivity
-ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:15:9-22:20
+ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:16:9-23:20
 	android:screenOrientation
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:17:13-49
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:18:13-49
 	android:configChanges
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:16:13-48
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:17:13-48
 	android:name
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:15:19-47
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:16:19-47
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:18:13-21:29
+ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:19:13-22:29
 action#android.intent.action.MAIN
-ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:19:17-69
+ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:20:17-69
 	android:name
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:19:25-66
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:20:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:20:17-77
+ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:21:17-77
 	android:name
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:20:27-74
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:21:27-74
 activity#org.pytorch.demo.objectdetection.ObjectDetectionActivity
-ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:23:9-27:20
+ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:24:9-28:20
 	android:screenOrientation
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:26:13-49
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:27:13-49
 	android:configChanges
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:25:13-48
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:26:13-48
 	android:name
-		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:24:13-52
+		ADDED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml:25:13-52
 uses-sdk
 INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/src/main/AndroidManifest.xml

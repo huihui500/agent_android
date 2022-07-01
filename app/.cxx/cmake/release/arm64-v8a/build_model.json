@@ -17,7 +17,7 @@
       ],
       "buildRoot": "/home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/.cxx/cmake/release/arm64-v8a",
       "cmakeToolchain": "/home/khm/Android/Sdk/ndk/16.1.4479499/build/cmake/android.toolchain.cmake",
-      "cmakeExecutable": "/home/khm/Android/Sdk/cmake/3.18.1/bin/cmake",
+      "cmakeExecutable": "/home/khm/Android/Sdk/cmake/3.10.2.4988404/bin/cmake",
       "variables": [
         {
           "name": "CMAKE_CXX_FLAGS",
@@ -64,6 +64,10 @@
           "value": "/home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/build/intermediates/cmake/release/obj/arm64-v8a"
         },
         {
+          "name": "CMAKE_MAKE_PROGRAM",
+          "value": "/home/khm/Android/Sdk/cmake/3.10.2.4988404/bin/ninja"
+        },
+        {
           "name": "CMAKE_SYSTEM_NAME",
           "value": "Android"
         },
@@ -100,8 +104,9 @@
     "module": {
       "buildSystem": "CMAKE",
       "cmake": {
-        "cmakeExe": "/home/khm/Android/Sdk/cmake/3.18.1/bin/cmake",
-        "minimumCmakeVersion": "3.18.1"
+        "cmakeExe": "/home/khm/Android/Sdk/cmake/3.10.2.4988404/bin/cmake",
+        "minimumCmakeVersion": "3.10.2",
+        "ninjaExe": "/home/khm/Android/Sdk/cmake/3.10.2.4988404/bin/ninja"
       },
       "cmakeToolchainFile": "/home/khm/Android/Sdk/ndk/16.1.4479499/build/cmake/android.toolchain.cmake",
       "cxxFolder": "/home/khm/project/agent_4mission/yolo2android/android-demo-app/ObjectDetection/app/.cxx",

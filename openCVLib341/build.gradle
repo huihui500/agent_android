@@ -94,7 +94,7 @@ println "OpenCV: " + project.buildscript.sourceFile
 
 android {
     compileSdkVersion 30
-//buildToolsVersion "27.0.3" // not needed since com.android.tools.build:gradle:3.0.0
+    //buildToolsVersion "27.0.3" // not needed since com.android.tools.build:gradle:3.0.0
 
     defaultConfig {
         minSdkVersion 21
@@ -114,15 +114,12 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs = ['native/libs']
             java.srcDirs = ['java/src']
             aidl.srcDirs = ['java/src']
             res.srcDirs = ['java/res']
             manifest.srcFile 'java/AndroidManifest.xml'
         }
     }
-    buildToolsVersion '27.0.3'
-    ndkVersion '16.1.4479499'
 }
 
 dependencies {

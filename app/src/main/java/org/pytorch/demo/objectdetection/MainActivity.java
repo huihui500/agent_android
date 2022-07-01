@@ -21,8 +21,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -100,6 +103,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
         }
 
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R || Environment.isExternalStorageManager()) {
+
+        } else {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+            startActivity(intent);
+        }
+
         setContentView(R.layout.activity_main);
 
         try {
@@ -115,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mResultView = findViewById(R.id.resultView);
         mResultView.setVisibility(View.INVISIBLE);
 
+        textView.setText(initQr());
         final Button buttonTest = findViewById(R.id.testButton);
         buttonTest.setText(("Test Image 1/3"));
         buttonTest.setOnClickListener(new View.OnClickListener() {
@@ -292,4 +303,5 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
     public native String opBitmap(Bitmap bitmap, Bitmap.Config argb8888);
+    public native String initQr();
 }
