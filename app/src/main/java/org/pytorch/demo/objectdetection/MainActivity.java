@@ -42,12 +42,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     private int mImageIndex = 0;
-    private String[] mTestImages = {"test1.png", "test2.jpg", "test3.png"};
+    private String[] mTestImages = {"main1.jpg", "main2.png", "main3.png"};
 
     private ImageView mImageView;
     private ResultView mResultView;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Module mModule = null;
     private float mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY;
 
+    // 模型写入缓存
     public static String assetFilePath(Context context, String assetName) throws IOException {
         File file = new File(context.getFilesDir(), assetName);
         if (file.exists() && file.length() > 0) {
@@ -76,6 +78,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
     }
 
+    /*
+        权限申请，　
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         });
 
-
+        // 选择事件: 相册、拍照、取消
         final Button buttonSelect = findViewById(R.id.selectButton);
         buttonSelect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -167,8 +172,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 mButtonDetect.setText(getString(R.string.run_model));
 
                 mImgScaleX = (float)mBitmap.getWidth() / PrePostProcessor.mInputWidth;
-                mImgScaleY = (float)mBitmap.getHeight() / PrePostProcessor.mInputHeight;
-
+//                mImgScaleY = (float)mBitmap.getHeight() / PrePostProcessor.mInputHeight;
+                mImgScaleY = (float)mBitmap.getHeight() / 180; //实际缩放
+                // ImageView (1080, 1080)   mbitMap(320, 320)
                 mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getHeight());
                 mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mImageView.getHeight() / mBitmap.getHeight() : (float)mImageView.getWidth() / mBitmap.getWidth());
 
@@ -179,10 +185,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 thread.start();
             }
         });
-
+        // 模型加载
         try {
-            mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "yolov5s.torchscript.ptl"));
-            BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("classes.txt")));
+            mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "best.ptl"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("mainClasses.txt")));
             String line;
             List<String> classes = new ArrayList<>();
             while ((line = br.readLine()) != null) {
@@ -195,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             finish();
         }
     }
-
+    // 选择事件
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -234,16 +240,33 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
     }
+    // 高度上下零填充70行
+    private Tensor pad(Tensor x){
+        final FloatBuffer floatBuffer = Tensor.allocateFloatBuffer(3 * PrePostProcessor.mInputWidth * PrePostProcessor.mInputHeight);
+        int offset = 70 * 320;
+        float[] rawdata = x.getDataAsFloatArray();
+        int[] new_offset_rgb = {0, 102400, 204800};
+        int[] old_offset_rgb = {0, 57600, 115200};
+        for(int i = 0; i<180*320; i++){
+            for(int j=0;j<3;j++) {
+                floatBuffer.put(new_offset_rgb[j]+offset+i, rawdata[old_offset_rgb[j]+i]);
+            }
+        }
+        return Tensor.fromBlob(floatBuffer, new long[]{1, 3, PrePostProcessor.mInputHeight, PrePostProcessor.mInputWidth});
+    }
+
 
     @Override
     public void run() {
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.mInputWidth, 180, true);
+
         final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
-        IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
+        final Tensor padTensor = pad(inputTensor);
+        IValue[] outputTuple = mModule.forward(IValue.from(padTensor)).toTuple();
         final Tensor outputTensor = outputTuple[0].toTensor();
         final float[] outputs = outputTensor.getDataAsFloatArray();
         final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
-
+        // 更新所有控件
         runOnUiThread(() -> {
             mButtonDetect.setEnabled(true);
             mButtonDetect.setText(getString(R.string.detect));
