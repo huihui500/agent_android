@@ -55,7 +55,7 @@ public class PrePostProcessor {
     private static int mOutputColumn = 15; // left, top, right, bottom, score and 80 class probability
     private static float mThreshold = 0.25f; // score above which a detection is generated
     private static int mNmsLimit = 15;
-    private static float iouThreshold = 0.45f;
+    private static float iouThreshold = 0.25f;
 
     static String[] mClasses;
 
@@ -143,9 +143,9 @@ public class PrePostProcessor {
                 float h = outputs[i* mOutputColumn +3];
 
                 float left = imgScaleX * (x - w/2);
-                float top = imgScaleY * (y - h/2);
+                float top = imgScaleY * (y - 110 - h/2);
                 float right = imgScaleX * (x + w/2);
-                float bottom = imgScaleY * (y + h/2);
+                float bottom = imgScaleY * (y - 110 + h/2);
 
                 float max = outputs[i* mOutputColumn +5];
                 int cls = 0;

@@ -52,7 +52,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     private int mImageIndex = 0;
-    private String[] mTestImages = {"main1.jpg", "main2.png", "main3.png"};
+    private String[] mTestImages = {"main1.jpg", "main2.jpg", "main3.png"};
 
     private TextView textView;
     private ImageView mImageView;
@@ -196,7 +196,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 // ImageView (1080, 1080)   mbitMap(320, 320)
                 mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getHeight());
                 mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mImageView.getHeight() / mBitmap.getHeight() : (float)mImageView.getWidth() / mBitmap.getWidth());
-
+//                mIvScaleX = (float)mImageView.getWidth() / mBitmap.getWidth();
+//                mIvScaleY  = (float)mImageView.getHeight() / mBitmap.getHeight();
                 mStartX = (mImageView.getWidth() - mIvScaleX * mBitmap.getWidth())/2;
                 mStartY = (mImageView.getHeight() -  mIvScaleY * mBitmap.getHeight())/2;
 
@@ -230,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     if (resultCode == RESULT_OK && data != null) {
                         mBitmap = (Bitmap) data.getExtras().get("data");
                         Matrix matrix = new Matrix();
-                        matrix.postRotate(90.0f);
+//                        matrix.postRotate(90.0f);
                         mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
                         mImageView.setImageBitmap(mBitmap);
                     }
