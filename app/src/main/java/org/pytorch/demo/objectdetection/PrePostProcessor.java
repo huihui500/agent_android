@@ -175,7 +175,7 @@ public class PrePostProcessor {
         for (int i = 0; i< mOutputRow; i++) {
             if (outputs[i* mOutputColumn_graph +4] > mThreshold) {
                 float x = outputs[i* mOutputColumn_graph];
-                float y = outputs[i* mOutputColumn_graph +1]-70;
+                float y = outputs[i* mOutputColumn_graph +1];
                 float w = outputs[i* mOutputColumn_graph +2];
                 float h = outputs[i* mOutputColumn_graph +3];
 
@@ -193,7 +193,7 @@ public class PrePostProcessor {
                     }
                 }
                 Rect raw_rect = new Rect((int)left, (int)top, (int)right, (int)bottom);
-                Rect rect = new Rect((int)(startX-110+ivScaleX*left), (int)(startY-100+top*ivScaleY), (int)(startX-110+ivScaleX*right), (int)(startY-100+ivScaleY*bottom));
+                Rect rect = new Rect((int)(startX-110+ivScaleX*left), (int)(startY-150+top*ivScaleY), (int)(startX-110+ivScaleX*right), (int)(startY-150+ivScaleY*bottom));
                 Result result = new Result(cls, outputs[i*mOutputColumn_graph+4], rect, raw_rect);
                 results.add(result);
             }

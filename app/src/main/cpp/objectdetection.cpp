@@ -17,6 +17,27 @@ using namespace std;
 
 Ptr<wechat_qrcode::WeChatQRCode> detector;
 
+Mat balance(Mat img)
+{
+    vector<Mat> bgrMat;
+    split(img, bgrMat);
+
+    vector<float> weighted;
+    for(int i=0; i<bgrMat.size(); i++)
+        weighted.push_back(mean(bgrMat[i])[0]);
+    float k = (weighted[0] + weighted[1] + weighted[2])/3;
+    for(int i=0; i<weighted.size();i++)
+        weighted[i] = k / weighted[i];
+
+//    vector<Mat> mergeMat;
+    for(int i=0; i<weighted.size();i++)
+    {
+        addWeighted(bgrMat[i], weighted[i], bgrMat[i], 0, 0, bgrMat[i]);
+    }
+    Mat dstMat;
+    merge(bgrMat, dstMat);
+    return dstMat;
+}
 int color_class(Mat src, int x, int y, int w, int h)
 {
     int redsum=0, yellowsum=0, blacksum=0;
@@ -105,9 +126,67 @@ Java_org_pytorch_demo_objectdetection_MainActivity_initQr(JNIEnv *env, jobject t
     return env->NewStringUTF("sucess load");
 }
 extern "C"
-JNIEXPORT jstring JNICALL
+JNIEXPORT jint JNICALL
 Java_org_pytorch_demo_objectdetection_MainActivity_colorBitmap(JNIEnv *env, jobject thiz,
                                                                jobject bitmap, jobject argb8888) {
     // TODO: implement colorBitmap()
+//    String color[] = {"red", "yellow", "green", "qing", "blue", "pin", "red", "black", "white"};
+    int color_lower[9][3] = {{0, 35, 46},
+                             {15, 35, 46},
+                             {35, 35, 46},
+                             {78, 35, 46},
+                             {100, 35, 46},
+                             {125, 35, 46},
+                             {156, 35, 46},
+                             {0, 0, 0},
+                             {0, 0, 221}};
+    int color_upper[9][3] = {{15, 255, 255},
+                             {34, 255, 255},
+                             {77, 255, 255},
+                             {99, 255, 255},
+                             {124, 255, 255},
+                             {155, 255, 255},
+                             {180, 255, 255},
+                             {180, 255, 35},
+                             {180, 30, 255}};
 
+    Mat srcMat;// rgba
+    Mat dstMat;// BGR
+
+    bitmap2Mat(env, bitmap, &srcMat, true);
+    cvtColor(srcMat, dstMat, CV_RGBA2BGR);
+
+    Mat balanceMat = balance(dstMat);
+    Mat blurMat;
+    GaussianBlur(balanceMat, blurMat, Size(5,5), 0);
+
+    Mat hsvMat;
+    cvtColor(blurMat, hsvMat, CV_BGR2HSV);
+
+    vector<Mat> v_hsvMat;
+    vector<int> max_hsv;
+    split(hsvMat, v_hsvMat);
+
+    int channels[] = {0};
+    int histSize[] = {256};
+    float Ranges[] = {0, 256};
+    const float* hsvRanges[] = {Ranges};
+    MatND dstHist;
+    for (int i=0; i<3; i++){
+        calcHist(&v_hsvMat[i], 1, channels, Mat(), dstHist, 1, histSize, hsvRanges, true, false);
+        int maxIndex = 0;
+        minMaxIdx(dstHist, 0, 0, 0, &maxIndex);
+        max_hsv.push_back(maxIndex);
+    }
+
+    int color_index=-1;
+    for(int i=0; i<9; i++){
+        if(max_hsv[0] <= color_upper[i][0] && max_hsv[0] >= color_lower[i][0]
+        && max_hsv[1] <= color_upper[i][1] && max_hsv[1] >= color_lower[i][1]
+        && max_hsv[2] <= color_upper[i][2] && max_hsv[2] >= color_lower[i][1]) {
+            color_index = i;
+            break;
+        }
+    }
+    return color_index;
 }

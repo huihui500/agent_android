@@ -352,6 +352,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                             Result tmp = results_.get(i_);
                             tmp.classIndex += 10;
                             results.add(tmp);
+                            Rect tmp_rect = tmp.raw_rect;
+                            int x_tmp = tmp_rect.left, y_tmp = tmp_rect.top, width_tmp = tmp_rect.right-tmp_rect.left, height_tmp = tmp_rect.bottom-tmp_rect.top;
+                            Bitmap sub_graph = Bitmap.createBitmap(mBitmap, x_tmp, y_tmp, width_tmp, height_tmp);
+                            int color_index = colorBitmap(sub_graph, Bitmap.Config.ARGB_8888);
                         }
 
                         // graph_recognize
@@ -374,7 +378,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             output = "none";
 
 
-
         // 更新所有控件
         String finalOutput = output;
         runOnUiThread(() -> {
@@ -390,5 +393,5 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     public native String opBitmap(Bitmap bitmap, Bitmap.Config argb8888);
     public native String initQr();
-//    public native String colorBitmap(Bitmap bitmap, Bitmap.Config argb8888);
+    public native int colorBitmap(Bitmap bitmap, Bitmap.Config argb8888);
 }
