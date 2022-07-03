@@ -33,11 +33,13 @@ class Result {
     int classIndex;
     Float score;
     Rect rect;
+    Rect raw_rect;
 
-    public Result(int cls, Float output, Rect rect) {
+    public Result(int cls, Float output, Rect rect, Rect raw_rect) {
         this.classIndex = cls;
         this.score = output;
         this.rect = rect;
+        this.raw_rect = raw_rect;
     }
 };
 
@@ -55,9 +57,12 @@ public class PrePostProcessor {
     private static int mOutputColumn = 15; // left, top, right, bottom, score and 80 class probability
     private static float mThreshold = 0.25f; // score above which a detection is generated
     private static int mNmsLimit = 15;
-    private static float iouThreshold = 0.25f;
+    private static float iouThreshold = 0.45f;
 
     static String[] mClasses;
+    static String[] graphClasses;
+    private static int mOutputColumn_graph = 10; // left, top, right, bottom, score and 80 class probability
+
 
     // The two methods nonMaxSuppression and IOU below are ported from https://github.com/hollance/YOLO-CoreML-MPSNNGraph/blob/master/Common/Helpers.swift
     /**
@@ -75,7 +80,7 @@ public class PrePostProcessor {
                 new Comparator<Result>() {
                     @Override
                     public int compare(Result o1, Result o2) {
-                        return o1.score.compareTo(o2.score);
+                        return o2.score.compareTo(o1.score);
                     }
                 });
 
@@ -138,14 +143,14 @@ public class PrePostProcessor {
         for (int i = 0; i< mOutputRow; i++) {
             if (outputs[i* mOutputColumn +4] > mThreshold) {
                 float x = outputs[i* mOutputColumn];
-                float y = outputs[i* mOutputColumn +1];
+                float y = outputs[i* mOutputColumn +1]-70;
                 float w = outputs[i* mOutputColumn +2];
                 float h = outputs[i* mOutputColumn +3];
 
                 float left = imgScaleX * (x - w/2);
-                float top = imgScaleY * (y - 110 - h/2);
+                float top = imgScaleY * (y - h/2);
                 float right = imgScaleX * (x + w/2);
-                float bottom = imgScaleY * (y - 110 + h/2);
+                float bottom = imgScaleY * (y + h/2);
 
                 float max = outputs[i* mOutputColumn +5];
                 int cls = 0;
@@ -155,9 +160,40 @@ public class PrePostProcessor {
                         cls = j;
                     }
                 }
+                Rect raw_rect = new Rect((int)left, (int)top, (int)right, (int)bottom);
+                Rect rect = new Rect((int)(startX+ivScaleX*left), (int)(startY-120+top*ivScaleY), (int)(startX+ivScaleX*right), (int)(startY-120+ivScaleY*bottom));
+                Result result = new Result(cls, outputs[i*mOutputColumn+4], rect, raw_rect);
+                results.add(result);
+            }
+        }
+        return nonMaxSuppression(results, mNmsLimit, iouThreshold);
+    }
 
-                Rect rect = new Rect((int)(startX+ivScaleX*left), (int)(startY+top*ivScaleY), (int)(startX+ivScaleX*right), (int)(startY+ivScaleY*bottom));
-                Result result = new Result(cls, outputs[i*mOutputColumn+4], rect);
+    static ArrayList<Result> outputsToNMSPredictions_graph(float[] outputs, float imgScaleX, float imgScaleY, float ivScaleX, float ivScaleY, float startX, float startY) {
+        ArrayList<Result> results = new ArrayList<>();
+        for (int i = 0; i< mOutputRow; i++) {
+            if (outputs[i* mOutputColumn_graph +4] > mThreshold) {
+                float x = outputs[i* mOutputColumn_graph];
+                float y = outputs[i* mOutputColumn_graph +1]-70;
+                float w = outputs[i* mOutputColumn_graph +2];
+                float h = outputs[i* mOutputColumn_graph +3];
+
+                float left = imgScaleX * (x - w/2);
+                float top = imgScaleY * (y - h/2);
+                float right = imgScaleX * (x + w/2);
+                float bottom = imgScaleY * (y + h/2);
+
+                float max = outputs[i* mOutputColumn_graph +5];
+                int cls = 0;
+                for (int j = 0; j < mOutputColumn_graph -5; j++) {
+                    if (outputs[i* mOutputColumn_graph +5+j] > max) {
+                        max = outputs[i* mOutputColumn_graph +5+j];
+                        cls = j;
+                    }
+                }
+                Rect raw_rect = new Rect((int)left, (int)top, (int)right, (int)bottom);
+                Rect rect = new Rect((int)(startX+ivScaleX*left), (int)(startY-120+top*ivScaleY), (int)(startX+ivScaleX*right), (int)(startY-120+ivScaleY*bottom));
+                Result result = new Result(cls, outputs[i*mOutputColumn_graph+4], rect, raw_rect);
                 results.add(result);
             }
         }

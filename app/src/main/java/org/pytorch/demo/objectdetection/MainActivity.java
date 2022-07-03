@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,7 +53,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     private int mImageIndex = 0;
-    private String[] mTestImages = {"main1.jpg", "main2.jpg", "main3.png"};
+    private String[] mTestImages = {"main1.jpg", "main2.png", "main3.png"};
 
     private TextView textView;
     private ImageView mImageView;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private ProgressBar mProgressBar;
     private Bitmap mBitmap = null;
     private Module mModule = null;
+    private Module graphModule = null;
+    private Bitmap graphBitmap = null;
     private float mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY;
 
     // 模型写入缓存
@@ -216,6 +219,16 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
             PrePostProcessor.mClasses = new String[classes.size()];
             classes.toArray(PrePostProcessor.mClasses);
+            // subgraph
+            graphModule  = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "best_graph.ptl"));
+            BufferedReader br_graph = new BufferedReader(new InputStreamReader(getAssets().open("graphClasses.txt")));
+            String line_graph;
+            List<String> classes_graph = new ArrayList<>();
+            while ((line_graph = br_graph.readLine()) != null) {
+                classes_graph.add(line_graph);
+            }
+            PrePostProcessor.graphClasses = new String[classes_graph.size()];
+            classes_graph.toArray(PrePostProcessor.graphClasses);
         } catch (IOException e) {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
@@ -263,6 +276,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     // 高度上下零填充70行
     private Tensor pad(Tensor x){
         final FloatBuffer floatBuffer = Tensor.allocateFloatBuffer(3 * PrePostProcessor.mInputWidth * PrePostProcessor.mInputHeight);
+        float value = (float) (114.0/255.0);
+
+        for(int i=0; i<320*320*3; i++)
+            floatBuffer.put(i, value);
         int offset = 70 * 320;
         float[] rawdata = x.getDataAsFloatArray();
         int[] new_offset_rgb = {0, 102400, 204800};
@@ -280,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     @Override
     public void run() {
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.mInputWidth, 180, true);
-
+//        Bitmap.create
         final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
         final Tensor padTensor = pad(inputTensor);
         IValue[] outputTuple = mModule.forward(IValue.from(padTensor)).toTuple();
@@ -288,10 +305,69 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final float[] outputs = outputTensor.getDataAsFloatArray();
         final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
 
+        String output = "";
+        int qrcode_flag = 0;
+        int plate_flag = 0;
+        int graph_flag = 0;
 
-        String output = opBitmap(mBitmap, Bitmap.Config.ARGB_8888);
+        if (results.size()>0)
+        {
+            for(int i=0; i<results.size(); i++)
+                if(results.get(i).classIndex==9)
+                {
+                    qrcode_flag = 1;
+                    output = opBitmap(mBitmap, Bitmap.Config.ARGB_8888);
+                    break;
+                }
+            if(qrcode_flag == 0){
+                for(int i=0; i<results.size(); i++)
+                    if(results.get(i).classIndex==7 || results.get(i).classIndex==8)
+                    {
+                        plate_flag = 1;
+                        // plate_recognize
+                        output = "plate";
+                    }
+            }
+
+            if(qrcode_flag == 0 && plate_flag==0){
+                for(int i=0; i<results.size(); i++)
+                    if(results.get(i).classIndex==6)
+                    {
+                        Rect rect = results.get(i).raw_rect;
+                        graph_flag = 1;
+                        int x_ = rect.left, y_ = rect.top, width_ = rect.right-rect.left, height_ = rect.bottom-rect.top;
+                        graphBitmap = Bitmap.createBitmap(mBitmap, x_, y_, width_, height_);
+                        Bitmap tmp_resizedBitmap = Bitmap.createScaledBitmap(graphBitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);
+                        final Tensor inputTensor_ = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
+//                        final Tensor padTensor = pad(inputTensor);
+                        IValue[] outputTuple_ = graphModule.forward(IValue.from(inputTensor)).toTuple();
+                        final Tensor outputTensor_ = outputTuple_[0].toTensor();
+                        final float[] outputs_ = outputTensor_.getDataAsFloatArray();
+                        final ArrayList<Result> results_ =  PrePostProcessor.outputsToNMSPredictions_graph(outputs_, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY, substartX, substartY, subscaleX, subscaleY);
+
+
+                        // graph_recognize
+                        output = "graph";
+                    }
+            }
+//
+//            if(qrcode_flag == 0 && plate_flag==0 && graph_flag ==0){
+//                for(int i=0; i<results.size(); i++)
+//
+//                {
+//                    graph_flag = 1;
+//                    // graph_recognize
+//                    output = "graph";
+//                }
+//            }
+        }
+        else
+            output = "none";
+
+
 
         // 更新所有控件
+        String finalOutput = output;
         runOnUiThread(() -> {
             mButtonDetect.setEnabled(true);
             mButtonDetect.setText(getString(R.string.detect));
@@ -299,7 +375,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             mResultView.setResults(results);
             mResultView.invalidate();
             mResultView.setVisibility(View.VISIBLE);
-            textView.setText(output);
+            textView.setText(finalOutput);
         });
     }
 
