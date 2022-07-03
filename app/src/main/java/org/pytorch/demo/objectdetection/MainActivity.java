@@ -53,7 +53,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     private int mImageIndex = 0;
-    private String[] mTestImages = {"main1.jpg", "main2.png", "main3.png"};
+    private String[] mTestImages = {"main1.jpg", "main2.png", "main3.png", "main4.jpg"};
 
     private TextView textView;
     private ImageView mImageView;
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         textView.setText(initQr());
         final Button buttonTest = findViewById(R.id.testButton);
-        buttonTest.setText(("Test Image 1/3"));
+        buttonTest.setText(("Test Image 1/4"));
         buttonTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mResultView.setVisibility(View.INVISIBLE);
@@ -262,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                                 String picturePath = cursor.getString(columnIndex);
                                 mBitmap = BitmapFactory.decodeFile(picturePath);
                                 Matrix matrix = new Matrix();
-                                matrix.postRotate(90.0f);
+//                                matrix.postRotate(90.0f);
                                 mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
                                 mImageView.setImageBitmap(mBitmap);
                                 cursor.close();
@@ -390,4 +390,5 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     public native String opBitmap(Bitmap bitmap, Bitmap.Config argb8888);
     public native String initQr();
+//    public native String colorBitmap(Bitmap bitmap, Bitmap.Config argb8888);
 }

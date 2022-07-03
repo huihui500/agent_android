@@ -104,3 +104,10 @@ Java_org_pytorch_demo_objectdetection_MainActivity_initQr(JNIEnv *env, jobject t
     }
     return env->NewStringUTF("sucess load");
 }
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_org_pytorch_demo_objectdetection_MainActivity_colorBitmap(JNIEnv *env, jobject thiz,
+                                                               jobject bitmap, jobject argb8888) {
+    // TODO: implement colorBitmap()
+
+}
