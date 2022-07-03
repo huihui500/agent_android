@@ -8,3 +8,8 @@ graph
 plate_blue
 plane_green
 qrcode
+circle
+rhomb
+fives
+tri
+rect

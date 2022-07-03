@@ -60,7 +60,7 @@ public class PrePostProcessor {
     private static float iouThreshold = 0.45f;
 
     static String[] mClasses;
-    static String[] graphClasses;
+//    static String[] graphClasses;
     private static int mOutputColumn_graph = 10; // left, top, right, bottom, score and 80 class probability
 
 
@@ -169,7 +169,8 @@ public class PrePostProcessor {
         return nonMaxSuppression(results, mNmsLimit, iouThreshold);
     }
 
-    static ArrayList<Result> outputsToNMSPredictions_graph(float[] outputs, float imgScaleX, float imgScaleY, float ivScaleX, float ivScaleY, float startX, float startY) {
+    static ArrayList<Result> outputsToNMSPredictions_graph(float[] outputs, float ivScaleX, float ivScaleY, float startX, float startY,
+                                                           float subStartX, float subStartY, float subScaleX, float subScaleY) {
         ArrayList<Result> results = new ArrayList<>();
         for (int i = 0; i< mOutputRow; i++) {
             if (outputs[i* mOutputColumn_graph +4] > mThreshold) {
@@ -178,10 +179,10 @@ public class PrePostProcessor {
                 float w = outputs[i* mOutputColumn_graph +2];
                 float h = outputs[i* mOutputColumn_graph +3];
 
-                float left = imgScaleX * (x - w/2);
-                float top = imgScaleY * (y - h/2);
-                float right = imgScaleX * (x + w/2);
-                float bottom = imgScaleY * (y + h/2);
+                float left = subStartX + subScaleX * (x - w/2);
+                float top = subStartY + subScaleY * (y - h/2);
+                float right = subStartX + subScaleX * (x + w/2);
+                float bottom = subStartY + subScaleY * (y + h/2);
 
                 float max = outputs[i* mOutputColumn_graph +5];
                 int cls = 0;
@@ -192,7 +193,7 @@ public class PrePostProcessor {
                     }
                 }
                 Rect raw_rect = new Rect((int)left, (int)top, (int)right, (int)bottom);
-                Rect rect = new Rect((int)(startX+ivScaleX*left), (int)(startY-120+top*ivScaleY), (int)(startX+ivScaleX*right), (int)(startY-120+ivScaleY*bottom));
+                Rect rect = new Rect((int)(startX-110+ivScaleX*left), (int)(startY-100+top*ivScaleY), (int)(startX-110+ivScaleX*right), (int)(startY-100+ivScaleY*bottom));
                 Result result = new Result(cls, outputs[i*mOutputColumn_graph+4], rect, raw_rect);
                 results.add(result);
             }

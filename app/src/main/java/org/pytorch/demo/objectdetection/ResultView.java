@@ -20,10 +20,10 @@ import java.util.ArrayList;
 
 public class ResultView extends View {
 
-    private final static int TEXT_X = 40;
-    private final static int TEXT_Y = 35;
-    private final static int TEXT_WIDTH = 260;
-    private final static int TEXT_HEIGHT = 50;
+    private final static int TEXT_X = 20;
+    private final static int TEXT_Y = 15;
+    private final static int TEXT_WIDTH = 80;
+    private final static int TEXT_HEIGHT = 20;
 
     private Paint mPaintRectangle;
     private Paint mPaintText;
@@ -59,8 +59,8 @@ public class ResultView extends View {
             mPaintText.setColor(Color.WHITE);
             mPaintText.setStrokeWidth(0);
             mPaintText.setStyle(Paint.Style.FILL);
-            mPaintText.setTextSize(32);
-            canvas.drawText(String.format("%s %.2f", PrePostProcessor.mClasses[result.classIndex], result.score), result.rect.left + TEXT_X, result.rect.top + TEXT_Y, mPaintText);
+            mPaintText.setTextSize(16);
+            canvas.drawText(String.format("%s", PrePostProcessor.mClasses[result.classIndex]), result.rect.left + TEXT_X, result.rect.top + TEXT_Y, mPaintText);
         }
     }
 

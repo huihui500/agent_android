@@ -221,14 +221,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             classes.toArray(PrePostProcessor.mClasses);
             // subgraph
             graphModule  = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "best_graph.ptl"));
-            BufferedReader br_graph = new BufferedReader(new InputStreamReader(getAssets().open("graphClasses.txt")));
-            String line_graph;
-            List<String> classes_graph = new ArrayList<>();
-            while ((line_graph = br_graph.readLine()) != null) {
-                classes_graph.add(line_graph);
-            }
-            PrePostProcessor.graphClasses = new String[classes_graph.size()];
-            classes_graph.toArray(PrePostProcessor.graphClasses);
+//            BufferedReader br_graph = new BufferedReader(new InputStreamReader(getAssets().open("graphClasses.txt")));
+//            String line_graph;
+//            List<String> classes_graph = new ArrayList<>();
+//            while ((line_graph = br_graph.readLine()) != null) {
+//                classes_graph.add(line_graph);
+//            }
+//            PrePostProcessor.graphClasses = new String[classes_graph.size()];
+//            classes_graph.toArray(PrePostProcessor.graphClasses);
         } catch (IOException e) {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
@@ -326,6 +326,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                         plate_flag = 1;
                         // plate_recognize
                         output = "plate";
+                        break;
                     }
             }
 
@@ -338,16 +339,24 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                         int x_ = rect.left, y_ = rect.top, width_ = rect.right-rect.left, height_ = rect.bottom-rect.top;
                         graphBitmap = Bitmap.createBitmap(mBitmap, x_, y_, width_, height_);
                         Bitmap tmp_resizedBitmap = Bitmap.createScaledBitmap(graphBitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);
-                        final Tensor inputTensor_ = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
-//                        final Tensor padTensor = pad(inputTensor);
-                        IValue[] outputTuple_ = graphModule.forward(IValue.from(inputTensor)).toTuple();
+                        final Tensor inputTensor_ = TensorImageUtils.bitmapToFloat32Tensor(tmp_resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
+                        IValue[] outputTuple_ = graphModule.forward(IValue.from(inputTensor_)).toTuple();
                         final Tensor outputTensor_ = outputTuple_[0].toTensor();
                         final float[] outputs_ = outputTensor_.getDataAsFloatArray();
-                        final ArrayList<Result> results_ =  PrePostProcessor.outputsToNMSPredictions_graph(outputs_, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY, substartX, substartY, subscaleX, subscaleY);
 
+                        float subscaleX = (float)width_/PrePostProcessor.mInputWidth, subscaleY = (float)height_/PrePostProcessor.mInputHeight;
+
+                        final ArrayList<Result> results_ =  PrePostProcessor.outputsToNMSPredictions_graph(outputs_, mImgScaleX, mImgScaleY, mStartX, mStartY, x_, y_, subscaleX, subscaleY);
+                        for(int i_=0; i_<results_.size();i_++)
+                        {
+                            Result tmp = results_.get(i_);
+                            tmp.classIndex += 10;
+                            results.add(tmp);
+                        }
 
                         // graph_recognize
                         output = "graph";
+                        break;
                     }
             }
 //
