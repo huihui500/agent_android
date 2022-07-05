@@ -58,6 +58,8 @@ public class PrePostProcessor {
     private static float mThreshold = 0.25f; // score above which a detection is generated
     private static int mNmsLimit = 15;
     private static float iouThreshold = 0.45f;
+    private static float graphThreshold = 0.35f;
+    private static float graphIouThreshold = 0.2f;
 
     static String[] mClasses;
 //    static String[] graphClasses;
@@ -170,19 +172,24 @@ public class PrePostProcessor {
     }
 
     static ArrayList<Result> outputsToNMSPredictions_graph(float[] outputs, float ivScaleX, float ivScaleY, float startX, float startY,
-                                                           float subStartX, float subStartY, float subScaleX, float subScaleY) {
+                                                           float subStartX, float subStartY, float subScaleX, int pad_up) {
         ArrayList<Result> results = new ArrayList<>();
         for (int i = 0; i< mOutputRow; i++) {
-            if (outputs[i* mOutputColumn_graph +4] > mThreshold) {
+            if (outputs[i* mOutputColumn_graph +4] > graphThreshold) {
                 float x = outputs[i* mOutputColumn_graph];
-                float y = outputs[i* mOutputColumn_graph +1];
+                float y = outputs[i* mOutputColumn_graph +1] - pad_up;
                 float w = outputs[i* mOutputColumn_graph +2];
                 float h = outputs[i* mOutputColumn_graph +3];
 
-                float left = subStartX + subScaleX * (x - w/2);
-                float top = subStartY + subScaleY * (y - h/2);
-                float right = subStartX + subScaleX * (x + w/2);
-                float bottom = subStartY + subScaleY * (y + h/2);
+//                float left = subStartX + (x - w/2)/subScaleX;
+//                float top = subStartY + (y - h/2)/subScaleX;
+//                float right = subStartX + (x + w/2)/subScaleX;
+//                float bottom = subStartY + (y + h/2)/subScaleX;
+
+                float left = (x - w/2)/subScaleX;
+                float top = (y - h/2)/subScaleX;
+                float right = (x + w/2)/subScaleX;
+                float bottom = (y + h/2)/subScaleX;
 
                 float max = outputs[i* mOutputColumn_graph +5];
                 int cls = 0;
@@ -198,6 +205,6 @@ public class PrePostProcessor {
                 results.add(result);
             }
         }
-        return nonMaxSuppression(results, mNmsLimit, iouThreshold);
+        return nonMaxSuppression(results, mNmsLimit, graphIouThreshold);
     }
 }

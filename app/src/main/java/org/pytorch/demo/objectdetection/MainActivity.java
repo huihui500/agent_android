@@ -34,6 +34,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cdjysd.licenseplatelib.utils.LPalte;
+
 import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Bitmap graphBitmap = null;
     private float mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY;
 
+    private LPalte lpr;
     // 模型写入缓存
     public static String assetFilePath(Context context, String assetName) throws IOException {
         File file = new File(context.getFilesDir(), assetName);
@@ -291,6 +294,24 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
         return Tensor.fromBlob(floatBuffer, new long[]{1, 3, PrePostProcessor.mInputHeight, PrePostProcessor.mInputWidth});
     }
+    // 上下pad
+    private Tensor pad(Tensor x, int up, int height){
+        final FloatBuffer floatBuffer = Tensor.allocateFloatBuffer(3 * PrePostProcessor.mInputWidth * PrePostProcessor.mInputHeight);
+        float value = (float) (114.0/255.0);
+
+        for(int i=0; i<320*320*3; i++)
+            floatBuffer.put(i, value);
+        int offset = up * 320;
+        float[] rawdata = x.getDataAsFloatArray();
+        int[] new_offset_rgb = {0, 102400, 204800};
+        int[] old_offset_rgb = {0, height*320, height*320*2};
+        for(int i = 0; i<height*320; i++){
+            for(int j=0;j<3;j++) {
+                floatBuffer.put(new_offset_rgb[j]+offset+i, rawdata[old_offset_rgb[j]+i]);
+            }
+        }
+        return Tensor.fromBlob(floatBuffer, new long[]{1, 3, PrePostProcessor.mInputHeight, PrePostProcessor.mInputWidth});
+    }
 
 
 
@@ -329,50 +350,49 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                         break;
                     }
             }
-
+            String graph_cls[] = {"圆", "菱形", "五星", "三角", "矩形"};
+            String color[] = {"红", "黄", "绿", "青", "蓝", "粉", "红", "黑", "白"};
             if(qrcode_flag == 0 && plate_flag==0){
                 for(int i=0; i<results.size(); i++)
                     if(results.get(i).classIndex==6)
                     {
+                        output = "";
                         Rect rect = results.get(i).raw_rect;
                         graph_flag = 1;
                         int x_ = rect.left, y_ = rect.top, width_ = rect.right-rect.left, height_ = rect.bottom-rect.top;
                         graphBitmap = Bitmap.createBitmap(mBitmap, x_, y_, width_, height_);
-                        Bitmap tmp_resizedBitmap = Bitmap.createScaledBitmap(graphBitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);
+
+                        float ratio = (float)320/width_;
+                        int newheight_ = (int) (ratio*height_);
+                        Bitmap tmp_resizedBitmap = Bitmap.createScaledBitmap(graphBitmap, 320, newheight_, true);
                         final Tensor inputTensor_ = TensorImageUtils.bitmapToFloat32Tensor(tmp_resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
-                        IValue[] outputTuple_ = graphModule.forward(IValue.from(inputTensor_)).toTuple();
+                        int pad_up = (int)(320 - newheight_)/2;
+                        final Tensor padTensor_ = pad(inputTensor_, pad_up, newheight_);
+                        IValue[] outputTuple_ = graphModule.forward(IValue.from(padTensor_)).toTuple();
                         final Tensor outputTensor_ = outputTuple_[0].toTensor();
                         final float[] outputs_ = outputTensor_.getDataAsFloatArray();
 
-                        float subscaleX = (float)width_/PrePostProcessor.mInputWidth, subscaleY = (float)height_/PrePostProcessor.mInputHeight;
-
-                        final ArrayList<Result> results_ =  PrePostProcessor.outputsToNMSPredictions_graph(outputs_, mImgScaleX, mImgScaleY, mStartX, mStartY, x_, y_, subscaleX, subscaleY);
+                        final ArrayList<Result> results_ =  PrePostProcessor.outputsToNMSPredictions_graph(outputs_, mImgScaleX, mImgScaleY, mStartX, mStartY, x_, y_, ratio, pad_up);
                         for(int i_=0; i_<results_.size();i_++)
                         {
                             Result tmp = results_.get(i_);
-                            tmp.classIndex += 10;
-                            results.add(tmp);
+//                            tmp.classIndex += 10;
+//                            results.add(tmp);
                             Rect tmp_rect = tmp.raw_rect;
                             int x_tmp = tmp_rect.left, y_tmp = tmp_rect.top, width_tmp = tmp_rect.right-tmp_rect.left, height_tmp = tmp_rect.bottom-tmp_rect.top;
-                            Bitmap sub_graph = Bitmap.createBitmap(mBitmap, x_tmp, y_tmp, width_tmp, height_tmp);
+                            Bitmap sub_graph = Bitmap.createBitmap(graphBitmap, x_tmp, y_tmp, width_tmp, height_tmp);
                             int color_index = colorBitmap(sub_graph, Bitmap.Config.ARGB_8888);
+                            output = output + " " + color[color_index] + "-"+ graph_cls[tmp.classIndex];
                         }
-
-                        // graph_recognize
-                        output = "graph";
                         break;
                     }
             }
-//
-//            if(qrcode_flag == 0 && plate_flag==0 && graph_flag ==0){
-//                for(int i=0; i<results.size(); i++)
-//
-//                {
-//                    graph_flag = 1;
-//                    // graph_recognize
-//                    output = "graph";
-//                }
-//            }
+            if(qrcode_flag == 0 && plate_flag==0 && graph_flag ==0){
+                for(int i=0; i<results.size(); i++)
+                {
+                    output = "traffic";
+                }
+            }
         }
         else
             output = "none";
